@@ -24,7 +24,6 @@ public class LiteCartLeftMenu {
         driver1 = new ChromeDriver();
 
         driver1.get("http://localhost/litecart/admin/");
-        driver1.get("http://localhost/litecart/admin/");
         driver1.findElement(By.name("username")).sendKeys("admin");
         driver1.findElement(By.name("password")).sendKeys("admin");
         driver1.findElement(By.name("remember_me")).isEnabled();
