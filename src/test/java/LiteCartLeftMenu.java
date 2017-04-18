@@ -1,4 +1,5 @@
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -22,34 +23,49 @@ public class LiteCartLeftMenu {
         System.setProperty("webdriver.chrome.driver", "chromedriver_win32/chromedriver.exe");
 
         driver1 = new ChromeDriver();
+        driver1.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+        driver1.manage().window().maximize();
+        driver1.get("http://localhost/litecart/admin/");
 
-        driver1.get("http://localhost/litecart/admin/");
-        driver1.get("http://localhost/litecart/admin/");
         driver1.findElement(By.name("username")).sendKeys("admin");
         driver1.findElement(By.name("password")).sendKeys("admin");
         driver1.findElement(By.name("remember_me")).isEnabled();
         driver1.findElement(By.name("login")).click();
-        driver1.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
-        driver1.manage().window().maximize();
+
     }
     @Test
     public void MenuItemsClick() {
 
         List<WebElement> menuItems = driver1.findElement(By.id("box-apps-menu")).findElements(By.id("app-"));
 
-        for (WebElement element: menuItems) {
-            element.click();
-            if (element.findElement(By.className("docs")).findElements(By.tagName("li")).size() != 0) {
-                List<WebElement> menuSubItems = element.findElement(By.className("docs")).findElements(By.tagName("li"));
+        for(int i =0; i< menuItems.size(); i++){
+            driver1.findElement(By.id("box-apps-menu")).findElements(By.id("app-")).get(i).click();
+            if(isElementPresent(driver1, By.className("docs"))) {
+                List<WebElement> sumMenuItems = driver1.findElement(By.id("box-apps-menu")).findElement(By.className("selected")).findElement(By.className("docs")).findElements(By.tagName("li"));
+                if (sumMenuItems.size() > 1) {
+                    for (int j = 1; j < sumMenuItems.size(); j++) {
 
-                for (WebElement subElement : menuItems) {
-                    subElement.click();
+                        driver1.findElement(By.id("box-apps-menu")).findElement(By.className("selected")).findElement(By.className("docs")).findElements(By.tagName("li")).get(j).click();
+                        if(driver1.findElement(By.id("box-apps-menu")).findElement(By.className("selected")).findElement(By.className("docs")).findElements(By.tagName("li")).get(j).getText() != "Modules")
+                        Assert.assertEquals(driver1.findElement(By.id("box-apps-menu")).findElement(By.className("selected")).findElement(By.className("docs")).findElements(By.tagName("li")).get(j).getText(), driver1.findElement(By.id("content")).findElement(By.tagName("h1")).getText());
+                    }
                 }
             }
+            else Assert.assertEquals(driver1.findElement(By.id("box-apps-menu")).findElements(By.id("app-")).
+                    get(i).getText(), driver1.findElement(By.id("content")).findElement(By.tagName("h1")).getText());
         }
 
     }
 
+    public boolean isElementPresent(WebDriver driver, By by) {
+        boolean isPresent = true;
+        //search for elements and check if list is empty
+        if (driver.findElements(by).isEmpty()) {
+            isPresent = false;
+        }
+        //rise back implicitly wait time
+        return isPresent;
+    }
     @After
     public void stop() {
         driver1.quit();
