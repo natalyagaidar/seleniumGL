@@ -1,5 +1,4 @@
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -23,15 +22,14 @@ public class LiteCartLeftMenu {
         System.setProperty("webdriver.chrome.driver", "chromedriver_win32/chromedriver.exe");
 
         driver1 = new ChromeDriver();
-        driver1.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
-        driver1.manage().window().maximize();
-        driver1.get("http://localhost/litecart/admin/");
 
+        driver1.get("http://localhost/litecart/admin/");
         driver1.findElement(By.name("username")).sendKeys("admin");
         driver1.findElement(By.name("password")).sendKeys("admin");
         driver1.findElement(By.name("remember_me")).isEnabled();
         driver1.findElement(By.name("login")).click();
-
+        driver1.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+        driver1.manage().window().maximize();
     }
     @Test
     public void MenuItemsClick() {
