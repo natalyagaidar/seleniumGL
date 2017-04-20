@@ -64,7 +64,7 @@ public class Task6 {
         driver1.findElement(By.cssSelector("button[type=submit]")).click();
         List<WebElement> products = driver1.findElement(By.className("dataTable")).findElements(By.className("row"));
         int index = products.size();
-        String expected = products.get(products.size()-2).getText();
+        String expected = products.get(products.size()-1).getText();
         Assert.assertEquals(productName, expected);
 
 
